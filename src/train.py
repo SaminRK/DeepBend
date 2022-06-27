@@ -7,7 +7,7 @@ import os
 import pickle
 import argparse
 
-from tensorflow.keras.callbacks import EarlyStopping
+from keras.callbacks import EarlyStopping
 
 from utils.data_preprocess import get_dataset
 from models.model_dispatcher import get_model
@@ -16,7 +16,6 @@ from utils.utils import get_model_id, get_hyperparameters
 
 def main():
     start_time = time.time()
-    
     parser = argparse.ArgumentParser()
     parser.add_argument("--model")
     parser.add_argument("--encoding", default="one-hot", choices=["one-hot", "dinucleotide"])
@@ -46,22 +45,28 @@ def main():
 
     train_dataset = get_dataset(train_filename, encoding)
     validation_dataset = get_dataset(validation_filename, encoding)
-    
+
     history, val_history = train(model, hyperparams, train_dataset, validation_dataset)
-                            
+
     np.set_printoptions(threshold=sys.maxsize)
 
     print(f"Seed number is {seed}")
 
     if not os.path.isdir("model_weights"):
         os.mkdir("model_weights")
-    
+
     model_id = get_model_id(model_name, hyperparameter_filename, train_filename, seed)
-    
+
     store_model_weights(model, model_id, "model_weights")
     store_training_history(model_id, history, "training_histories")
-    store_model_performance(model.metrics_names, hyperparams, model_id, history, 
-                            val_history, "model_performances.csv")
+    store_model_performance(
+        model.metrics_names,
+        hyperparams,
+        model_id,
+        history,
+        val_history,
+        "model_performances.csv",
+    )
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
@@ -77,10 +82,14 @@ def train(model, hyperparams, train_dataset, validation_dataset):
 
     early_stopping_callback = EarlyStopping(patience=15, verbose=1, restore_best_weights=True)
 
-    history = model.fit({"forward": x1_train, "reverse": x2_train}, y_train,
-                        epochs=hyperparams["epochs"], batch_size=hyperparams["batch_size"],
-                        validation_data=({"forward": x1_val, "reverse": x2_val}, y_val),
-                        callbacks=[early_stopping_callback])
+    history = model.fit(
+        {"forward": x1_train, "reverse": x2_train},
+        y_train,
+        epochs=hyperparams["epochs"],
+        batch_size=hyperparams["batch_size"],
+        validation_data=({"forward": x1_val, "reverse": x2_val}, y_val),
+        callbacks=[early_stopping_callback],
+    )
 
     val_history = model.evaluate({"forward": x1_val, "reverse": x2_val}, y_val)
 
@@ -89,9 +98,9 @@ def train(model, hyperparams, train_dataset, validation_dataset):
 
 def store_model_weights(model, model_id, directory):
     if not os.path.isdir(directory):
-            os.mkdir(directory)
+        os.mkdir(directory)
     model.save_weights(f"model_weights/{model_id}", save_format="h5")
-    
+
 
 def store_training_history(model_id, history, directory):
     if not os.path.isdir(directory):
@@ -100,24 +109,18 @@ def store_training_history(model_id, history, directory):
         pickle.dump(history.history, f)
 
 
-def store_model_performance(metrics_names, 
-                            hyperparams, 
-                            model_id, 
-                            history, 
-                            validation_history,
-                            csv_filename):
+def store_model_performance(metrics_names, hyperparams, model_id, history, validation_history, csv_filename):
     if not os.path.isfile(csv_filename):
         metric_str = ",".join(metrics_names)
         parameter_str = ",".join(hyperparams.keys())
         first_line = ",validation,,,train,,,parameters\n"
         second_line = "model_id," + metric_str + "," + metric_str + "," + parameter_str + "\n"
         with open(csv_filename, "w") as f:
-            print(first_line+second_line, file=f)
+            print(first_line + second_line, file=f)
 
     with open(csv_filename, "a") as f:
         line = f"{model_id}," + ",".join(["{:.5f}".format(x) for x in validation_history]) + ","
-        line += ",".join(["{:.5f}".format(history.history[metric_name][-1])
-                          for metric_name in metrics_names]) + ","
+        line += ",".join(["{:.5f}".format(history.history[metric_name][-1]) for metric_name in metrics_names]) + ","
         line += ",".join([str(v) for v in hyperparams.values()])
         print(line, file=f)
 

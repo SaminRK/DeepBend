@@ -40,22 +40,22 @@ def main():
     model.load_weights(model_weights_filename)
 
     np.set_printoptions(threshold=sys.maxsize, precision=5, suppress=True)
-    
+
     test_dataset = get_dataset(test_filename, encoding)
-    
+
     y = test_dataset["readout"]
     x1 = test_dataset["forward"]
     x2 = test_dataset["reverse"]
 
-    history = model.evaluate({'forward': x1, 'reverse': x2}, y)
+    history = model.evaluate({"forward": x1, "reverse": x2}, y)
 
-    print('metric values of model.evaluate: ' + str(history))
-    print('metrics names are ' + str(model.metrics_names))
+    print("metric values of model.evaluate: " + str(history))
+    print("metrics names are " + str(model.metrics_names))
 
-    predictions = model.predict({'forward': x1, 'reverse': x2}).flatten()
-    print('r2_score: ' + str(r2_score(y, predictions)))
-    print('pearsonr: ' + str(pearsonr(y, predictions)))
-    print('spearmanr: ' + str(spearmanr(y, predictions)))
+    predictions = model.predict({"forward": x1, "reverse": x2}).flatten()
+    print("r2_score: " + str(r2_score(y, predictions)))
+    print("pearsonr: " + str(pearsonr(y, predictions)))
+    print("spearmanr: " + str(spearmanr(y, predictions)))
 
     scatterplot_values(predictions, y)
 
@@ -64,13 +64,14 @@ def main():
 
 
 def scatterplot_values(predicted_values, true_values):
-    df = pd.DataFrame({'predicted_value': predicted_values, 'true_value': true_values})
-    p = (ggplot(data=df, mapping=aes(x='true_value', y='predicted_value'))
-         + stat_bin_2d(bins=150)
-         + xlim(-2.75, 2.75)
-         + ylim(-2.75, 2.75))
+    df = pd.DataFrame({"predicted_value": predicted_values, "true_value": true_values})
+    p = (
+        ggplot(data=df, mapping=aes(x="true_value", y="predicted_value"))
+        + stat_bin_2d(bins=150)
+        + xlim(-2.75, 2.75)
+        + ylim(-2.75, 2.75)
+    )
     print(p)
-
 
 
 if __name__ == "__main__":

@@ -1,2 +1,3 @@
 deepbend-env/
 *__pycache__*
+.vscode/

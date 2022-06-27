@@ -10,17 +10,18 @@ class preprocess:
         self.shortened = shortened
 
         if file:
-            self.df = pd.read_table(filepath_or_buffer=file, )
-            
+            self.df = pd.read_table(
+                filepath_or_buffer=file,
+            )
+
             self.fw_sequences = []
             if self.shortened:
-                self.fw_sequences = self.df['Sequence']
+                self.fw_sequences = self.df["Sequence"]
             else:
-                self.fw_sequences = [s[25:-25] for s in self.df['Sequence']]
+                self.fw_sequences = [s[25:-25] for s in self.df["Sequence"]]
         else:
             self.fw_sequences = seqns
             self.c0 = c0
-
 
     def read_fasta_into_list(self):
         return self.fw_sequences
@@ -30,10 +31,9 @@ class preprocess:
 
     # augment the samples with reverse complement
     def rc_comp2(self):
-
         def rc_comp(seq):
-            rc_dict = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
-            rc_seq = ''.join([rc_dict[c] for c in seq[::-1]])
+            rc_dict = {"A": "T", "C": "G", "G": "C", "T": "A"}
+            rc_seq = "".join([rc_dict[c] for c in seq[::-1]])
             return rc_seq
 
         seqn = self.read_fasta_into_list()
@@ -48,11 +48,11 @@ class preprocess:
         if not self.file:
             return self.c0
         if self.shortened:
-            if 'C0' in self.df.columns:
-                return self.df['C0'].to_numpy()
+            if "C0" in self.df.columns:
+                return self.df["C0"].to_numpy()
             return None
-        if ' C0' in self.df.columns:
-            return self.df[' C0'].to_numpy()
+        if " C0" in self.df.columns:
+            return self.df[" C0"].to_numpy()
         return None
 
     def augment(self):
@@ -60,10 +60,7 @@ class preprocess:
         rc_fasta = self.rc_comp2()
         readout = self.read_readout()
 
-        dict = {
-            "new_fasta": new_fasta,
-            "readout": readout,
-            "rc_fasta": rc_fasta}
+        dict = {"new_fasta": new_fasta, "readout": readout, "rc_fasta": rc_fasta}
         return dict
 
     def without_augment(self):
@@ -101,43 +98,42 @@ def one_hot_encode_sequences(seqs):
     integer_encoder = LabelEncoder()
     # The OneHotEncoder converts an array of integers to a sparse matrix where
     # each row corresponds to one possible value of each feature.
-    one_hot_encoder = OneHotEncoder(categories='auto')
+    one_hot_encoder = OneHotEncoder(categories="auto")
 
     one_hot_encoded_seqs = []
     for seq in seqs:
-        seq = seq + 'ACGT'
+        seq = seq + "ACGT"
         integer_encoded = integer_encoder.fit_transform(list(seq))
         integer_encoded = np.array(integer_encoded).reshape(-1, 1)
         one_hot_encoded = one_hot_encoder.fit_transform(integer_encoded)
         one_hot_encoded_seqs.append(one_hot_encoded.toarray()[:-4])
-    
     return one_hot_encoded_seqs
 
 
 class Genome:
     def __init__(self, chromosome):
-        valid_chromosomes = ['I', 'II', 'III', 'IV', 'V', 'VI']
-        rel_file_path = ''
+        valid_chromosomes = ["I", "II", "III", "IV", "V", "VI"]
+        rel_file_path = ""
         if valid_chromosomes.count(chromosome) > 0:
-            rel_file_path = f'../data/genome/chr{chromosome}.fsa'
-            with open(rel_file_path, 'r') as f:
+            rel_file_path = f"../data/genome/chr{chromosome}.fsa"
+            with open(rel_file_path, "r") as f:
                 segs = f.readlines()
             segs = [s.strip() for s in segs]
-            self.chrom = ''.join(segs)
+            self.chrom = "".join(segs)
         elif all(c in "ATCG" for c in chromosome):
             self.chrom = chromosome
         else:
-            raise Exception('Unknown chromosome number or sequence')
+            raise Exception("Unknown chromosome number or sequence")
 
     def read_chromosome(self):
         return self.chrom
-    
+
     def one_hot_encode(self):
         return one_hot_encode_sequences([self.chrom])[0]
-        
+
     def rc_comp(self):
-        rc_dict = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
-        rc_seq = ''.join([rc_dict[c] for c in self.chrom[::-1]])
+        rc_dict = {"A": "T", "C": "G", "G": "C", "T": "A"}
+        rc_seq = "".join([rc_dict[c] for c in self.chrom[::-1]])
         return rc_seq
 
     def augment(self):

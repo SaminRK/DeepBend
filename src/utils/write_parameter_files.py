@@ -6,7 +6,7 @@ counter = 0
 
 for filter_0 in filter_0s:
     for filter_1 in filter_1s:
-        with open(f'parameters/parameter{start+counter}.txt', 'w') as f:
+        with open(f"parameters/parameter{start+counter}.txt", "w") as f:
             print(
                 """filters_0 {filter_0}
 filters_1 {filter_1}
@@ -15,7 +15,11 @@ regularizer_2 l2
 epochs 25
 batch_size 1024
 loss_func coeff_determination
-optimizer adam""".format(filter_0=filter_0, filter_1=filter_1), file=f,)
+optimizer adam""".format(
+                    filter_0=filter_0, filter_1=filter_1
+                ),
+                file=f,
+            )
             counter += 1
 
 
@@ -46,4 +50,3 @@ optimizer adam""".format(filter_0=filter_0, filter_1=filter_1), file=f,)
 #                         file=f,
 #                     )
 #                     counter += 1
-
