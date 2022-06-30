@@ -92,6 +92,7 @@ class preprocess:
         dict["reverse"] = reverse
         return dict
 
+
 def one_hot_encode_sequences(seqs):
     # The LabelEncoder encodes a sequence of bases as a sequence of
     # integers.
