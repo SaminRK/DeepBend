@@ -1,6 +1,5 @@
 import numpy as np
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-from utils.dinucleotide import mono_to_dinucleotide, dinucleotide_one_hot_encode
 import pandas as pd
 
 
@@ -78,6 +77,8 @@ class preprocess:
         return dict
 
     def get_dinucleotide_encoded_dataset(self):
+        from utils.dinucleotide import mono_to_dinucleotide, dinucleotide_one_hot_encode
+
         new_fasta = self.read_fasta_into_list()
         rc_fasta = self.rc_comp2()
         forward_sequences = mono_to_dinucleotide(new_fasta)

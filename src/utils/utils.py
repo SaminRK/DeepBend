@@ -27,10 +27,7 @@ def get_model_id(model_name: str, hyperparameter_filename: str, train_filename: 
     hyperparameter_filename_wo_ext = hyperparameter_filename.replace("/", "_").split(".")[0]
     train_filename_wo_ext = train_filename.split("/")[-1].split(".")[0]
     return f"{model_name}_{hyperparameter_filename_wo_ext}_{train_filename_wo_ext}_{seed}"
-<<<<<<< HEAD
 
-=======
->>>>>>> master
 
 def get_cross_validation_id(model_name, hyperparameter_filename, data_filename):
     hyperparameter_filename_wo_ext = hyperparameter_filename.replace("/", "_").split(".")[0]
