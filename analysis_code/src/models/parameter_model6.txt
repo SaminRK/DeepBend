@@ -1,0 +1,9 @@
+filters 512
+kernel_size 50
+pool_type Max
+regularizer L_2
+activation_type linear
+epochs 20
+batch_size 1024
+loss_func mse
+optimizer adam

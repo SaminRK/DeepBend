@@ -1,3 +1,8 @@
 deepbend-env/
 *__pycache__*
 .vscode/
+.mypy_cache/
+*.pyc
+.testmondata
+
+.vscode/
