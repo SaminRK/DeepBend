@@ -24,6 +24,7 @@ virtualenv .deepbend-env
 source .deepbend-env/bin/activate
 pip install -r requirements.txt
 ```
+The required data for running our codes are available in the following public Google Drive folder [https://drive.google.com/drive/folders/1Rb143RvlVEu8rciV7e0BTWUMkk72t4VM?usp=sharing](https://drive.google.com/drive/folders/1Rb143RvlVEu8rciV7e0BTWUMkk72t4VM?usp=sharing). Download the entire folder and unzip it in the project root directory.
 
 ## Training and evaluation
 For training the model, the following command can be used. Here we are training the DeepBend model with hyperparamters from `hyperparameters/hyperparameter262.txt`, on the *chrV_train* dataset and using the tiling_test dataset for validation. The weights of the trained model will be saved in the directory `model_weights/` with the name depending on the model name, hyperparamters file name, training dataset and the seed. 
