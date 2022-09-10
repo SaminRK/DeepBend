@@ -1,5 +1,5 @@
 # DeepBend
-This repository contains code, models and dataset of the paper titled “DeepBend: An Interpretable Model of DNA Bendability” which is currently under review in *Nature Machine Intelligence*.
+This repository contains code, models and dataset of the paper titled “DeepBend: An Interpretable Model of DNA Bendability” which is currently under review.
 
 ## Table of Content
 - [DeepBend](#deepbend)
