@@ -7,7 +7,7 @@ This repository contains code, models and dataset of the paper titled “DeepBen
   - [Model](#model)
   - [Setup](#setup)
   - [Training and evaluation](#training-and-evaluation)
-  - [Exploring a tained model](#exploring-a-trained-model)
+  - [Exploring a trained model](#exploring-a-trained-model)
   - [References](#references)
 ## Dataset
 We have used 4 datasets from [Basu et al. 2021](#references) for training and testing our models. These datasets are 1. *random*, 2. *nucleosomal*, 3. *tiling* and 4. *chrV* datasets. For the *tiling* and *chrV* dataset, we designed special train and test datasets to avoid leakage due to overlapping sequences. These are: 5. *tiling_train*, 6. *tiling_test*, 7. *chrV_train* and 8. *chrV_test*. All these datasets are in the directory `data/`
@@ -44,6 +44,7 @@ For k-fold cross validation, we can use the following command. Here we are doing
 python src/cross_validate.py --model model35 --dataset data/nucleosomal.txt \ 
   --k 10 --hyperparameters hyperparameters/hyperparameter262.txt
 ```
+Examples of hyperparameter files can be found [here](https://github.com/SameeLab-BCM/DeepBend/tree/master/hyperparameters). The hyperparameters are arranged in the form of key-value pairs in each line. Here `filters_n` means the number of filters in the n-th layer. `kernel_size_n` is the size of the kernel in the n-th layer. `regularizer_2` indicates the regularizer (`l1`, `l2`, `l1l2`, `lvariance` etc.) used in the last layer. `alpha` indicates the alpha parameter for multinomial convolution layer, whereas `A`, `C`, `G` & `T` are the background parameters.
 
 ## Exploring a trained model
 
