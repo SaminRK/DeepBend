@@ -1,5 +1,5 @@
 # DeepBend
-This repository contains code, models and dataset of the paper titled “DeepBend: An Interpretable Model of DNA Bendability” which is currently under review.
+This repository contains code, models and dataset of the paper titled [DeepBend: An Interpretable Model of DNA Bendability](https://doi.org/10.1016/j.isci.2023.105945).
 
 ## Table of Content
 - [DeepBend](#deepbend)
